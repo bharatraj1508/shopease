@@ -1,6 +1,6 @@
 require("dotenv").config();
 require("./src/models/user");
-require("./src/models/category");
+require("./src/models/order");
 require("./src/models/product");
 
 const express = require("express");

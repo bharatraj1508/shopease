@@ -14,4 +14,11 @@ const productSchema = Joi.object({
   owner: Joi.string().alphanum(),
 });
 
-module.exports = { authSchema, productSchema };
+const orderSchema = Joi.object({
+  user: Joi.string().alphanum(),
+  products: Joi.array().items(Joi.string().alphanum()),
+  totalPrice: Joi.number().min(1),
+  status: Joi.array().items(Joi.string),
+});
+
+module.exports = { authSchema, productSchema, orderSchema };
