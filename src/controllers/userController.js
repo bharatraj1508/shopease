@@ -1,12 +1,13 @@
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const { newAccessToken } = require("../utils/jwt");
+const { authSchema } = require("../utils/validationSchema");
 
 const registerUser = async (req, res) => {
-  const { name, email, password, roles } = req.body;
-
   try {
-    const existingUser = await User.findOne({ email });
+    const sanitized = await authSchema.validateAsync(req.body);
+
+    const existingUser = await User.findOne({ email: sanitized.email });
 
     if (existingUser) {
       return res.status(409).send({
@@ -15,10 +16,10 @@ const registerUser = async (req, res) => {
     }
 
     const user = await new User({
-      name,
-      email,
-      password,
-      roles,
+      name: sanitized.name,
+      email: sanitized.email,
+      password: sanitized.password,
+      roles: sanitized.roles,
     }).save();
 
     const token = newAccessToken(user._id);
@@ -29,7 +30,9 @@ const registerUser = async (req, res) => {
       token,
     });
   } catch (err) {
-    console.error("Error in registerUser:", err);
+    if (err.isJoi === true) {
+      return res.status(422).send({ error: err });
+    }
     res.status(500).send({ error: err });
   }
 };
