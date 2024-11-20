@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  username: {
+  email: {
     type: String,
     required: true,
   },
@@ -22,10 +22,12 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-UserSchema.pre("save", (next) => {
+UserSchema.pre("save", function (next) {
   const user = this;
 
-  if (!user.isModified("password")) return next();
+  if (!user.isModified("password")) {
+    return next();
+  }
 
   bcrypt.genSalt(10, (err, salt) => {
     if (err) return next(err);
@@ -39,7 +41,7 @@ UserSchema.pre("save", (next) => {
   });
 });
 
-UserSchema.methods.comparePassword = (password) => {
+UserSchema.methods.comparePassword = function (password) {
   const user = this;
 
   return new Promise((resolve, reject) => {

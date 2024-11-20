@@ -11,4 +11,4 @@ const CategorySchema = mongoose.Schema({
   },
 });
 
-mongoose.model("Product", CategorySchema);
+mongoose.model("Category", CategorySchema);

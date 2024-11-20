@@ -1,4 +1,7 @@
 require("dotenv").config();
+require("./src/models/user");
+require("./src/models/category");
+require("./src/models/product");
 
 const express = require("express");
 const cors = require("cors");
@@ -7,8 +10,10 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-app.use(cors);
-app.use(bodyParser.json);
+const authRoutes = require("./src/routes/authRoutes");
+
+app.use(cors());
+app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGOURI);
 
@@ -19,6 +24,8 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("error", (error) => [
   console.log("Error connecting to mongo instance", error),
 ]);
+
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send({ message: "Server is online" });
