@@ -11,7 +11,7 @@ const addProduct = async (req, res) => {
       name: sanitized.name,
       description: sanitized.description,
       price: sanitized.price,
-      owner: sanitized.owner,
+      owner: req.user._id,
     }).save();
 
     res.status(200).send({

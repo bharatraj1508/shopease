@@ -9,6 +9,13 @@ const {
   productList,
   deleteProduct,
 } = require("../controllers/productController");
+const passport = require("passport");
+
+router.use(passport.initialize());
+require("../utils/passport");
+const authenticate = passport.authenticate("jwt", { session: false });
+
+router.use(authenticate);
 
 router.post("/product/add", addProduct);
 router.put("/product/update", updateProduct);
