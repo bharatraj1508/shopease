@@ -11,6 +11,7 @@ const mongoose = require("mongoose");
 const app = express();
 
 const authRoutes = require("./src/routes/authRoutes");
+const productRoutes = require("./src/routes/productRoutes");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -26,6 +27,7 @@ mongoose.connection.on("error", (error) => [
 ]);
 
 app.use("/auth", authRoutes);
+app.use("/api", productRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).send({ message: "Server is online" });

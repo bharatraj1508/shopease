@@ -7,4 +7,11 @@ const authSchema = Joi.object({
   roles: Joi.array().items(Joi.string()),
 });
 
-module.exports = { authSchema };
+const productSchema = Joi.object({
+  name: Joi.string().lowercase(),
+  description: Joi.string().lowercase(),
+  price: Joi.number().min(1),
+  owner: Joi.string().alphanum(),
+});
+
+module.exports = { authSchema, productSchema };
